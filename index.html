@@ -1,815 +1,378 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071321">
+<meta name="description" content="SHAHEEN FormReady — free browser-based PDF, image, QR, text and file tools. Use practical file utilities on mobile and desktop.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="SHAHEEN FormReady">
+<meta name="keywords" content="free online tools, PDF merge, PDF split, PDF rotate, image converter, image compressor, image resize, QR code generator, JSON formatter, word counter, file checker">
+<link rel="canonical" href="https://shaheen-formready.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SHAHEEN FormReady — Free Online File Tools">
+<meta property="og:description" content="Useful browser-based tools for PDFs, images, QR codes, text and files.">
+<meta property="og:url" content="https://shaheen-formready.vercel.app/">
+<meta name="twitter:card" content="summary">
+<title>SHAHEEN FormReady — Free Online File Tools</title>
 
-  <meta name="monetag" content="8d79834fe94ef2976eedd73a9810db49">
-  
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Monetag verification -->
+<meta name="monetag" content="8d79834fe94ef2976eedd73a9810db49">
 
-<title>SHAHEEN FormReady — Free Image Tools</title>
-<meta name="description" content="Compress, resize and convert images with SHAHEEN FormReady. Control image quality, preserve dimensions and prepare images for online forms.">
-<meta name="theme-color" content="#173B4D">
+<!-- Monetag In-Page Push / Banner zone 12159003 -->
+<script>(function(s){s.dataset.zone='12159003',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
+<!-- Monetag Vignette Banner zone 12159005 -->
+<script>(function(s){s.dataset.zone='12159005',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+<!-- Libraries are downloaded from jsDelivr; file processing runs in this browser. -->
+<script defer src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"WebSite",
+ "name":"SHAHEEN FormReady",
+ "url":"https://shaheen-formready.vercel.app/",
+ "description":"Free browser-based PDF, image, QR, text and file utilities."
+}
+</script>
 <style>
-:root {
-  --navy:#173B4D;
-  --teal:#18A6A1;
-  --gold:#F1B85B;
-  --bg:#F5F8F8;
-  --white:#fff;
-  --text:#263640;
-  --muted:#687780;
-  --border:#DFE8E9;
-  --green:#237A58;
-  --red:#B33B3B;
-}
-
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
-  line-height:1.6;
-}
-
-button,input,select{font:inherit}
-
-button:focus-visible,input:focus-visible,
-select:focus-visible,a:focus-visible{
-  outline:3px solid var(--gold);
-  outline-offset:3px;
-}
-
-header{
-  background:white;
-  border-bottom:1px solid var(--border);
-  padding:15px 6%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-
-.logo{
-  text-decoration:none;
-  color:var(--navy);
-  font-size:23px;
-  font-weight:800;
-  letter-spacing:-1px;
-}
-
-.logo span{color:var(--teal)}
-
-.header-link{
-  color:var(--muted);
-  text-decoration:none;
-  font-size:13px;
-}
-
-main{
-  width:min(960px,92%);
-  margin:42px auto;
-}
-
-.hero{
-  text-align:center;
-  margin-bottom:30px;
-}
-
-.tag{
-  display:inline-block;
-  padding:5px 13px;
-  border-radius:30px;
-  background:#E5F5F3;
-  color:var(--navy);
-  font-size:12px;
-  font-weight:bold;
-}
-
-.hero h1{
-  color:var(--navy);
-  font-size:clamp(30px,5vw,46px);
-  line-height:1.15;
-  letter-spacing:-1.5px;
-  margin:17px 0 10px;
-}
-
-.hero p{
-  color:var(--muted);
-  max-width:600px;
-  margin:auto;
-}
-
-.card{
-  background:white;
-  border:1px solid var(--border);
-  border-radius:17px;
-  padding:25px;
-  box-shadow:0 9px 30px rgba(23,59,77,.05);
-}
-
-.card h2{color:var(--navy);margin:0}
-
-.muted{color:var(--muted);font-size:14px}
-
-.upload{
-  display:block;
-  margin-top:20px;
-  padding:30px 15px;
-  text-align:center;
-  border:2px dashed #A9C8C6;
-  border-radius:13px;
-  background:#F7FBFA;
-  cursor:pointer;
-}
-
-.upload.drag{
-  border-color:var(--teal);
-  background:#EAF8F6;
-}
-
-.upload-icon{font-size:36px;display:block}
-
-.upload strong{color:var(--navy)}
-.upload small{display:block;color:var(--muted);margin-top:5px}
-
-#fileInput{
-  position:absolute;
-  width:1px;
-  height:1px;
-  opacity:0;
-}
-
-.field{margin-top:21px}
-
-.field label{
-  display:block;
-  font-weight:bold;
-  font-size:14px;
-  margin-bottom:8px;
-}
-
-.field input[type="number"],
-.field select{
-  width:100%;
-  padding:12px;
-  border:1px solid var(--border);
-  border-radius:9px;
-  background:white;
-  color:var(--text);
-}
-
-.field input[type="range"]{
-  width:100%;
-  accent-color:var(--teal);
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-
-.quality-value{
-  color:var(--teal);
-  font-weight:bold;
-  float:right;
-}
-
-.checkline{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:23px;
-  font-size:14px;
-}
-
-.checkline input{
-  width:19px;
-  height:19px;
-  accent-color:var(--teal);
-}
-
-.resize-fields{
-  display:none;
-}
-
-.resize-fields.show{display:grid}
-
-.actions{
-  display:flex;
-  gap:10px;
-  margin-top:25px;
-}
-
-button{
-  border:0;
-  border-radius:9px;
-  padding:13px 18px;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-.primary{
-  flex:1;
-  background:var(--teal);
-  color:white;
-}
-
-.secondary{
-  background:#EDF1F2;
-  color:var(--navy);
-}
-
-button:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-}
-
-.status{
-  min-height:24px;
-  margin-top:16px;
-  font-size:13px;
-  color:var(--muted);
-}
-
-.status.error{color:var(--red)}
-.status.success{color:var(--green)}
-
-.previews{
-  display:none;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-  margin-top:25px;
-}
-
-.preview-box{
-  min-width:0;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:12px;
-  background:#FAFCFC;
-}
-
-.preview-box h3{
-  color:var(--navy);
-  font-size:14px;
-  margin:0 0 10px;
-}
-
-.preview-box img{
-  width:100%;
-  height:190px;
-  object-fit:contain;
-  background:#EDF1F2;
-  border-radius:8px;
-}
-
-.preview-info{
-  font-size:12px;
-  color:var(--muted);
-  margin-top:9px;
-  overflow-wrap:anywhere;
-}
-
-.result{
-  display:none;
-  background:#EDF8F4;
-  border:1px solid #B6DCCB;
-  border-radius:12px;
-  padding:17px;
-  margin-top:20px;
-}
-
-.result h3{color:var(--green);margin:0 0 9px}
-.result p{font-size:14px;margin:5px 0}
-
-.download{
-  display:inline-block;
-  background:var(--navy);
-  color:white;
-  padding:12px 18px;
-  border-radius:8px;
-  text-decoration:none;
-  font-weight:bold;
-  margin-top:12px;
-}
-
-.features{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:13px;
-  margin-top:25px;
-}
-
-.feature{
-  background:white;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:17px;
-}
-
-.feature strong{color:var(--navy)}
-.feature p{color:var(--muted);font-size:13px;margin:5px 0 0}
-
-.privacy{
-  margin-top:25px;
-  padding:18px;
-  border-radius:12px;
-  background:#EAF5F3;
-  font-size:14px;
-}
-
-footer{
-  background:white;
-  border-top:1px solid var(--border);
-  text-align:center;
-  padding:30px 15px;
-  margin-top:55px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-footer a{color:var(--navy)}
-
-@media(max-width:600px){
-  header{padding:13px 4%}
-  main{margin:28px auto}
-  .card{padding:18px}
-  .grid,.previews{grid-template-columns:1fr}
-  .features{grid-template-columns:1fr}
-  .actions{flex-direction:column}
-}
+:root{color-scheme:dark;--bg:#071321;--panel:#0d2032;--panel2:#122a40;--line:#254158;--text:#edf6ff;--muted:#a7bacb;--teal:#20d1b6;--blue:#56a9ff;--red:#ff7884;--green:#51d69a;--radius:18px;--shadow:0 16px 42px #0004}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:92px}body{margin:0;background:radial-gradient(ellipse at 75% -10%,#123654 0,transparent 38%),var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:var(--teal)}.wrap{width:min(1120px,calc(100% - 30px));margin:auto}.topbar{position:sticky;top:0;z-index:20;background:#071321ed;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}.nav{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:15px}.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--text);font-weight:850;letter-spacing:.3px}.logo{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(140deg,#18cbb4,#2479c9);color:#061727;font-size:22px;box-shadow:0 7px 25px #13cdb533}.navlinks{display:flex;gap:17px;align-items:center;flex-wrap:wrap}.navlinks a{text-decoration:none;color:var(--muted);font-size:14px}.navlinks a:hover{color:var(--teal)}.hero{padding:46px 0 28px;text-align:center}.eyebrow{display:inline-flex;gap:8px;align-items:center;padding:6px 12px;border:1px solid #1b776e;border-radius:999px;color:#8ff5e6;background:#0d3635;font-size:12px;font-weight:750}.hero h1{font-size:clamp(32px,6vw,56px);line-height:1.08;letter-spacing:-1.8px;margin:17px auto 13px;max-width:850px}.gradient{background:linear-gradient(90deg,#65e6d3,#70baff);background-clip:text;-webkit-background-clip:text;color:transparent}.hero p{max-width:710px;margin:0 auto;color:var(--muted);font-size:17px}.trustline{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}.chip{border:1px solid var(--line);background:#0b1b2b;border-radius:999px;padding:7px 11px;color:#c2d3e1;font-size:12px}.searchrow{display:flex;gap:10px;margin:22px auto 6px;max-width:610px}.searchrow input{flex:1}.field,select,textarea{width:100%;padding:12px 13px;border-radius:12px;border:1px solid var(--line);background:#081a2a;color:var(--text);outline:none;min-width:0}.field:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px #20d1b61f}.section-title{display:flex;align-items:end;justify-content:space-between;gap:14px;margin:25px 0 15px}.section-title h2{font-size:23px;margin:0}.section-title p{color:var(--muted);margin:3px 0 0;font-size:13px}.tabs{display:flex;gap:8px;overflow:auto;padding:3px 1px 12px;scrollbar-width:thin}.tab{white-space:nowrap;border:1px solid var(--line);background:#0a1a2a;color:#bdcbd8;border-radius:999px;padding:9px 14px;font-weight:700;font-size:13px}.tab.active,.tab:hover{color:#041b1a;background:var(--teal);border-color:var(--teal)}.tools-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:10px 0 24px}.tool-card{padding:17px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(155deg,#10273b,#0a1a2a);text-align:left;color:var(--text);min-height:125px;transition:transform .18s,border-color .18s}.tool-card:hover{transform:translateY(-2px);border-color:#20bda9}.tool-card .ico{font-size:23px}.tool-card strong{display:block;margin:7px 0 2px}.tool-card small{display:block;color:var(--muted);line-height:1.4}.workspace{border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(160deg,#10263a,#0a1a2b);padding:clamp(16px,3vw,25px);box-shadow:var(--shadow);margin:16px 0 28px}.panel{display:none}.panel.active{display:block}.panel h2{margin:0 0 6px;font-size:23px}.intro{color:var(--muted);margin:0 0 18px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.form-item{min-width:0}.form-item.full{grid-column:1/-1}.form-item label,.label{display:block;font-weight:700;font-size:13px;margin:0 0 7px;color:#d9e8f4}.hint{font-size:12px;color:var(--muted);margin:6px 0 0}.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}.btn{border:1px solid transparent;background:var(--teal);color:#052320;border-radius:12px;padding:11px 16px;font-weight:800;min-height:43px}.btn:hover{filter:brightness(1.07)}.btn.secondary{background:#18354c;color:#e5f3ff;border-color:#2c4b64}.btn.ghost{background:transparent;color:#d9e8f4;border-color:var(--line)}.btn.danger{background:#48222c;color:#ffd9dd;border-color:#78404a}.btn:disabled{opacity:.55;cursor:not-allowed}.drop{display:block;text-align:center;padding:24px 16px;border:1.5px dashed #39718a;background:#071a29;border-radius:15px;cursor:pointer}.drop:hover{border-color:var(--teal);background:#0b2736}.drop input{display:block;max-width:100%;margin:10px auto 0;color:var(--muted)}.drop strong{display:block}.drop small{display:block;color:var(--muted);margin-top:5px}.checkline{display:flex;gap:9px;align-items:center;color:var(--muted);font-size:13px;margin-top:9px}.checkline input{accent-color:var(--teal);width:17px;height:17px}.status{display:none;margin-top:15px;padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:#081927;color:#cbdbe9;overflow-wrap:anywhere}.status.show{display:block}.status.ok{border-color:#237a5a;color:#9df0c8}.status.error{border-color:#8b3f4b;color:#ffc2c9}.results{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:16px}.result{border:1px solid var(--line);border-radius:13px;padding:12px;background:#081a29;min-width:0}.result img{width:100%;height:125px;object-fit:contain;background:#071321;border-radius:9px}.result strong{display:block;overflow-wrap:anywhere;margin:7px 0 4px}.result small{color:var(--muted);display:block}.result a{display:inline-block;margin-top:8px;font-size:13px;font-weight:700}.outputbox{margin-top:13px;padding:14px;border:1px solid var(--line);border-radius:13px;background:#081a29}.outputbox textarea{min-height:145px;resize:vertical}.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}.metric{padding:12px;background:#081a29;border:1px solid var(--line);border-radius:12px}.metric strong{display:block;font-size:19px}.metric small{color:var(--muted)}.preview{width:100%;max-height:360px;object-fit:contain;background:#02080e;border-radius:12px;margin-top:13px}.tablewrap{overflow:auto;margin-top:12px}table{border-collapse:collapse;width:100%;font-size:13px}td,th{padding:9px;border-bottom:1px solid var(--line);text-align:left;overflow-wrap:anywhere}th{color:#9feee1}.notice{border-left:3px solid var(--blue);background:#0a2337;padding:12px 14px;border-radius:0 10px 10px 0;color:#c7d7e5;font-size:13px;margin:14px 0}.adnote{font-size:12px;color:#8297aa;text-align:center;padding:7px}.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.info-card{padding:17px;border:1px solid var(--line);border-radius:15px;background:#0c2032}.info-card h3{margin:0 0 7px}.info-card p{margin:0;color:var(--muted);font-size:14px}.faq details{border-bottom:1px solid var(--line);padding:13px 0}.faq summary{cursor:pointer;font-weight:700}.faq p{color:var(--muted);font-size:14px}.footer{border-top:1px solid var(--line);margin-top:42px;padding:28px 0 40px;color:var(--muted);font-size:13px}.footrow{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}.footer a{margin-right:12px}.hidden{display:none!important}.muted{color:var(--muted)}
+@media(max-width:760px){.nav{align-items:flex-start;padding:11px 0;flex-direction:column}.navlinks{gap:13px}.hero{padding-top:33px}.tools-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.content-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.wrap{width:min(100% - 20px,1120px)}.tools-grid{gap:9px}.tool-card{padding:13px;min-height:125px}.form-grid{grid-template-columns:1fr}.form-item.full{grid-column:auto}.metrics{grid-template-columns:1fr 1fr}.searchrow{flex-direction:column}.workspace{padding:14px}.hero p{font-size:15px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
-
 <body>
-
-<header>
-  <a class="logo" href="#">SHAHEEN<span>.</span></a>
-  <a class="header-link" href="mailto:mushtaqasghar669@gmail.com">
-    Contact
-  </a>
-</header>
-
-<main>
-
+<header class="topbar"><div class="wrap nav">
+ <a class="brand" href="#home" aria-label="SHAHEEN FormReady home"><span class="logo" aria-hidden="true">S</span><span>SHAHEEN <span class="gradient">FormReady</span></span></a>
+ <nav class="navlinks" aria-label="Main navigation"><a href="#tools">Tools</a><a href="#how">How it works</a><a href="#privacy">Privacy</a><a href="#faq">FAQ</a></nav>
+</div></header>
+<main class="wrap" id="home">
 <section class="hero">
-  <span class="tag">FREE IMAGE TOOLS</span>
-  <h1>Prepare Your Images. Preserve Their Quality.</h1>
-  <p>
-    Compress, resize and convert images with more control.
-    Your files stay on your device.
-  </p>
+ <span class="eyebrow">✦ FREE ONLINE UTILITIES</span>
+ <h1>Everyday file tasks.<br><span class="gradient">Made simpler.</span></h1>
+ <p>Useful tools for images, PDFs, QR codes, text and files — designed for phones, tablets and desktops.</p>
+ <div class="trustline"><span class="chip">✓ No account required</span><span class="chip">✓ Browser-based processing</span><span class="chip">✓ Mobile-friendly</span></div>
+ <div class="searchrow"><input class="field" id="toolSearch" type="search" placeholder="Search tools… e.g. image resize" aria-label="Search tools"><button class="btn" id="searchBtn" type="button">Find tool</button></div>
+</section>
+<section id="tools">
+ <div class="section-title"><div><h2>Explore tools</h2><p>Choose a tool to open its workspace.</p></div><span class="chip" id="toolCount">6 categories</span></div>
+ <div class="tabs" role="tablist" aria-label="Tool categories">
+  <button class="tab active" data-tab="image" role="tab" aria-selected="true">🖼️ Images</button>
+  <button class="tab" data-tab="pdf" role="tab" aria-selected="false">📄 PDF</button>
+  <button class="tab" data-tab="qr" role="tab" aria-selected="false">▦ QR Code</button>
+  <button class="tab" data-tab="text" role="tab" aria-selected="false">✍️ Text & JSON</button>
+  <button class="tab" data-tab="media" role="tab" aria-selected="false">🎬 Media</button>
+  <button class="tab" data-tab="file" role="tab" aria-selected="false">📁 File checker</button>
+ </div>
+ <div class="tools-grid" id="toolCards">
+  <button class="tool-card" data-open="image"><span class="ico">🖼️</span><strong>Image converter</strong><small>Convert, resize, rotate and compress pictures.</small></button>
+  <button class="tool-card" data-open="pdf"><span class="ico">📄</span><strong>PDF tools</strong><small>Merge, split, rotate PDFs and make PDFs from images.</small></button>
+  <button class="tool-card" data-open="qr"><span class="ico">▦</span><strong>QR code maker</strong><small>Create and download a QR code from text or a link.</small></button>
+  <button class="tool-card" data-open="text"><span class="ico">✍️</span><strong>Text & JSON tools</strong><small>Count words, change case, encode and format JSON.</small></button>
+  <button class="tool-card" data-open="media"><span class="ico">🎬</span><strong>Media inspector</strong><small>Preview audio/video, view metadata and export a video frame.</small></button>
+  <button class="tool-card" data-open="file"><span class="ico">📁</span><strong>File checker</strong><small>Inspect file type, size, modified date and SHA-256 hash.</small></button>
+ </div>
+</section>
+<div class="workspace" id="workspace">
+<!-- IMAGE TOOLS -->
+<section class="panel active" id="panel-image" role="tabpanel">
+ <h2>Image Studio</h2><p class="intro">Convert common images, resize them, rotate them and adjust lossy output quality.</p>
+ <div class="form-grid">
+  <div class="form-item full"><label class="drop"><strong>Choose one or more images</strong><small>JPG, PNG, WebP, GIF (first frame only), BMP where supported. Up to 20 files, 25 MB each.</small><input id="imageFiles" type="file" accept="image/*" multiple></label></div>
+  <div class="form-item"><label for="imgFormat">Output format</label><select id="imgFormat"><option value="image/webp">WebP — smaller files</option><option value="image/jpeg">JPG — widely compatible</option><option value="image/png">PNG — lossless, often larger</option></select></div>
+  <div class="form-item"><label for="imgQuality">Quality (JPG / WebP): <span id="qualityValue">0.88</span></label><input class="field" id="imgQuality" type="range" min="0.1" max="1" step="0.01" value="0.88"></div>
+  <div class="form-item"><label for="imgWidth">Maximum width (px)</label><input class="field" id="imgWidth" type="number" min="1" max="12000" placeholder="Original width"></div>
+  <div class="form-item"><label for="imgHeight">Maximum height (px)</label><input class="field" id="imgHeight" type="number" min="1" max="12000" placeholder="Original height"></div>
+  <div class="form-item"><label for="imgRotation">Rotate</label><select id="imgRotation"><option value="0">No rotation</option><option value="90">90° clockwise</option><option value="180">180°</option><option value="270">270° clockwise</option></select></div>
+  <div class="form-item"><label for="imgBackground">JPG background</label><select id="imgBackground"><option value="#ffffff">White</option><option value="#000000">Black</option><option value="#071321">Dark navy</option></select><p class="hint">Transparent areas cannot be retained in JPG.</p></div>
+ </div>
+ <label class="checkline"><input type="checkbox" id="keepAspect" checked> Keep original aspect ratio</label>
+ <div class="btnrow"><button class="btn" id="processImages">Process images</button><button class="btn secondary" id="zipImages" disabled>Download all as ZIP</button><button class="btn ghost" id="clearImages">Clear</button></div>
+ <div class="status" id="imageStatus" role="status" aria-live="polite"></div><div class="results" id="imageResults"></div>
+ <div class="notice">Image processing uses the browser Canvas API. JPG and WebP quality settings are lossy; PNG ignores the quality slider. Re-encoding can remove metadata and may change image appearance. Keep your original files.</div>
 </section>
 
-<section class="card">
-
-  <h2>Image Studio</h2>
-  <p class="muted">
-    Choose an image and customize your output.
-    Original dimensions are preserved by default.
-  </p>
-
-  <label class="upload" id="dropZone" for="fileInput">
-    <span class="upload-icon">📂</span>
-    <strong>Choose your image or drop it here</strong>
-    <small>JPG, PNG or WebP · Maximum 15 MB</small>
-  </label>
-
-  <input
-    id="fileInput"
-    type="file"
-    accept="image/jpeg,image/png,image/webp"
-  >
-
-  <div class="grid">
-
-    <div class="field">
-      <label for="format">Output format</label>
-      <select id="format">
-        <option value="original">Keep original format</option>
-        <option value="image/jpeg">JPG</option>
-        <option value="image/png">PNG (lossless)</option>
-        <option value="image/webp">WebP</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label for="quality">
-        Image quality
-        <span class="quality-value" id="qualityValue">95%</span>
-      </label>
-      <input
-        id="quality"
-        type="range"
-        min="80"
-        max="100"
-        value="95"
-      >
-      <small class="muted">Higher quality usually means a larger file.</small>
-    </div>
-
-  </div>
-
-  <label class="checkline">
-    <input type="checkbox" id="resizeToggle">
-    Resize image (optional)
-  </label>
-
-  <div class="grid resize-fields" id="resizeFields">
-
-    <div class="field">
-      <label for="width">Maximum width (pixels)</label>
-      <input type="number" id="width" min="1" max="12000" value="1920">
-    </div>
-
-    <div class="field">
-      <label for="height">Maximum height (pixels)</label>
-      <input type="number" id="height" min="1" max="12000" value="1920">
-    </div>
-
-  </div>
-
-  <div class="actions">
-    <button class="primary" id="processBtn" disabled>
-      Process Image
-    </button>
-
-    <button class="secondary" id="resetBtn">
-      Reset
-    </button>
-  </div>
-
-  <div class="status" id="status" role="status" aria-live="polite">
-    Select an image to begin.
-  </div>
-
-  <section class="previews" id="previews">
-
-    <div class="preview-box">
-      <h3>Original Image</h3>
-      <img id="originalPreview" alt="Original image preview">
-      <div class="preview-info" id="originalInfo"></div>
-    </div>
-
-    <div class="preview-box">
-      <h3>Processed Image</h3>
-      <img id="outputPreview" alt="Processed image preview">
-      <div class="preview-info" id="outputInfo"></div>
-    </div>
-
-  </section>
-
-  <section class="result" id="result" aria-live="polite">
-    <h3>✓ Your image is ready</h3>
-    <p id="sizeInfo"></p>
-    <p id="dimensionInfo"></p>
-    <p id="savingInfo"></p>
-    <a class="download" id="downloadLink" href="#">
-      Download Image
-    </a>
-  </section>
-
+<!-- PDF TOOLS -->
+<section class="panel" id="panel-pdf" role="tabpanel">
+ <h2>PDF Studio</h2><p class="intro">PDF operations happen in this browser using pdf-lib. Large documents may need more memory.</p>
+ <div class="form-grid">
+  <div class="form-item full"><label class="drop"><strong>PDF files for merging</strong><small>Select two or more PDF files, in the order you want them merged.</small><input id="mergeFiles" type="file" accept="application/pdf,.pdf" multiple></label><div class="btnrow"><button class="btn" id="mergePDF">Merge PDFs</button></div></div>
+  <div class="form-item full"><label class="drop"><strong>PDF file for page extraction or rotation</strong><small>Choose one PDF document.</small><input id="singlePDF" type="file" accept="application/pdf,.pdf"></label></div>
+  <div class="form-item"><label for="pageRange">Pages to extract</label><input class="field" id="pageRange" placeholder="Example: 1-3,5,8-10"><p class="hint">Page numbers start at 1. Leave blank to extract all pages.</p><button class="btn secondary" id="splitPDF">Extract pages</button></div>
+  <div class="form-item"><label>Rotate every page</label><p class="hint">Rotate all pages 90° clockwise, preserving the page content.</p><button class="btn secondary" id="rotatePDF">Rotate PDF 90°</button></div>
+  <div class="form-item full"><label class="drop"><strong>Images to PDF</strong><small>Select JPG or PNG images to create a multi-page PDF.</small><input id="pdfImages" type="file" accept="image/jpeg,image/png,.jpg,.jpeg,.png" multiple></label><button class="btn secondary" id="imagesToPDF">Create PDF from images</button></div>
+ </div>
+ <div class="status" id="pdfStatus" role="status" aria-live="polite"></div>
+ <div class="notice">This version does not claim advanced PDF compression, OCR, PDF-to-Word conversion, password removal or repair of damaged PDFs. Those need separate specialized processing and careful testing.</div>
 </section>
 
-<section class="features">
-  <article class="feature">
-    <strong>🔒 Private Processing</strong>
-    <p>Images are processed locally in your browser.</p>
-  </article>
-
-  <article class="feature">
-    <strong>✨ Quality Control</strong>
-    <p>Choose quality instead of forcing a tiny file size.</p>
-  </article>
-
-  <article class="feature">
-    <strong>📱 Responsive Design</strong>
-    <p>Designed for phones, tablets and computers.</p>
-  </article>
+<!-- QR -->
+<section class="panel" id="panel-qr" role="tabpanel">
+ <h2>QR Code Generator</h2><p class="intro">Create a QR code for a website, short message, contact details or other text.</p>
+ <div class="form-grid">
+  <div class="form-item full"><label for="qrText">Text or URL</label><textarea id="qrText" placeholder="https://example.com" rows="3"></textarea></div>
+  <div class="form-item"><label for="qrSize">Image size</label><select id="qrSize"><option value="256">256 × 256</option><option value="400" selected>400 × 400</option><option value="600">600 × 600</option><option value="1000">1000 × 1000</option></select></div>
+  <div class="form-item"><label for="qrMargin">Quiet zone / margin</label><select id="qrMargin"><option value="2">Small</option><option value="4" selected>Standard</option><option value="8">Large</option></select></div>
+ </div>
+ <div class="btnrow"><button class="btn" id="makeQR">Generate QR</button><button class="btn secondary" id="downloadQR" disabled>Download PNG</button></div>
+ <div class="status" id="qrStatus" role="status" aria-live="polite"></div><div id="qrOutput" class="outputbox hidden"><canvas id="qrCanvas" aria-label="Generated QR code"></canvas></div>
+ <div class="notice">Before printing, scan the QR code with a phone to confirm it opens the intended destination.</div>
 </section>
 
-<section class="privacy">
-  <strong>Privacy matters.</strong>
-  Your image is processed on your device.
-  SHAHEEN does not upload the image to its server.
+<!-- TEXT -->
+<section class="panel" id="panel-text" role="tabpanel">
+ <h2>Text & JSON Toolkit</h2><p class="intro">Quick writing utilities that work with text you paste into the editor.</p>
+ <div class="form-item"><label for="textInput">Your text</label><textarea id="textInput" rows="8" placeholder="Paste or type text here…"></textarea></div>
+ <div class="metrics"><div class="metric"><strong id="wordCount">0</strong><small>Words</small></div><div class="metric"><strong id="charCount">0</strong><small>Characters</small></div><div class="metric"><strong id="lineCount">0</strong><small>Lines</small></div></div>
+ <div class="btnrow"><button class="btn secondary" data-text="upper">UPPERCASE</button><button class="btn secondary" data-text="lower">lowercase</button><button class="btn secondary" data-text="title">Title Case</button><button class="btn secondary" data-text="trim">Clean spaces</button><button class="btn ghost" id="copyText">Copy text</button></div>
+ <div class="outputbox"><label for="jsonInput" class="label">JSON formatter & validator</label><textarea id="jsonInput" rows="6" placeholder='{"name":"SHAHEEN","tools":["PDF","Images"]}'></textarea><div class="btnrow"><button class="btn" id="formatJSON">Format JSON</button><button class="btn secondary" id="minifyJSON">Minify JSON</button><button class="btn ghost" id="copyJSON">Copy JSON</button></div><div class="status" id="jsonStatus" role="status" aria-live="polite"></div></div>
+ <div class="outputbox"><label for="encodeInput" class="label">URL / Base64 encoder</label><textarea id="encodeInput" rows="3" placeholder="Text to encode or decode…"></textarea><div class="btnrow"><button class="btn secondary" id="urlEncode">URL encode</button><button class="btn secondary" id="urlDecode">URL decode</button><button class="btn secondary" id="base64Encode">Base64 encode</button><button class="btn secondary" id="base64Decode">Base64 decode</button></div></div>
+ <div class="status" id="textStatus" role="status" aria-live="polite"></div>
 </section>
 
+<!-- MEDIA -->
+<section class="panel" id="panel-media" role="tabpanel">
+ <h2>Media Inspector</h2><p class="intro">Preview local video or audio, inspect basic media metadata and save a still frame from a video.</p>
+ <div class="form-grid"><div class="form-item full"><label class="drop"><strong>Select a video or audio file</strong><small>Media playback depends on the codecs supported by your browser.</small><input id="mediaFile" type="file" accept="video/*,audio/*"></label></div></div>
+ <video id="videoPreview" class="preview hidden" controls playsinline preload="metadata"></video><audio id="audioPreview" class="preview hidden" controls preload="metadata"></audio>
+ <div class="metrics" id="mediaMetrics"></div>
+ <div class="form-grid" style="margin-top:14px"><div class="form-item"><label for="frameTime">Frame time (seconds)</label><input class="field" id="frameTime" type="number" min="0" step="0.1" value="0"></div><div class="form-item"><label>Video frame</label><button class="btn secondary" id="captureFrame" disabled>Capture frame as PNG</button></div></div>
+ <canvas id="frameCanvas" class="hidden"></canvas><div class="status" id="mediaStatus" role="status" aria-live="polite"></div><div id="frameResult"></div>
+ <div class="notice">This tool does not re-encode or compress the whole video. Browser video encoders and supported formats vary by device; a “100% original quality” export cannot be guaranteed across all phones and browsers. A captured frame is a PNG image, not the original video.</div>
+</section>
+
+<!-- FILE CHECKER -->
+<section class="panel" id="panel-file" role="tabpanel">
+ <h2>File Checker & SHA-256</h2><p class="intro">Inspect basic file metadata and optionally calculate a SHA-256 checksum on your device.</p>
+ <div class="form-grid"><div class="form-item full"><label class="drop"><strong>Choose a file to inspect</strong><small>File contents are read locally for metadata and checksum calculation.</small><input id="inspectFile" type="file"></label></div></div>
+ <div class="tablewrap" id="fileDetails"></div>
+ <div class="btnrow"><button class="btn secondary" id="hashFile" disabled>Calculate SHA-256</button><button class="btn ghost" id="copyHash" disabled>Copy hash</button></div>
+ <div class="status" id="fileStatus" role="status" aria-live="polite"></div>
+ <div class="notice">SHA-256 is a checksum for comparing file integrity; it does not prove that a file is safe or malware-free.</div>
+</section>
+</div>
+
+<section id="how">
+ <div class="section-title"><div><h2>How it works</h2><p>Simple tools, with clear limits.</p></div></div>
+ <div class="content-grid">
+  <article class="info-card"><h3>1. Choose a tool</h3><p>Open the tool category and select a file or enter text. The page checks the required input before processing.</p></article>
+  <article class="info-card"><h3>2. Process in your browser</h3><p>Image, PDF and text operations run in the browser using JavaScript and the listed libraries. There is no SHAHEEN upload server in this single-file build.</p></article>
+  <article class="info-card"><h3>3. Review the result</h3><p>Check the generated file or text before saving it. Keep an original copy for important documents and photos.</p></article>
+  <article class="info-card"><h3>4. Download your result</h3><p>Save the output to your phone or computer. Some operations need an internet connection to load their processing libraries.</p></article>
+ </div>
+</section>
+
+<section id="privacy">
+ <div class="section-title"><div><h2>Privacy & transparency</h2><p>What this single-file version does — and does not — do.</p></div></div>
+ <div class="content-grid">
+  <article class="info-card"><h3>Browser-side file processing</h3><p>The tools in this page read selected files in the browser and create outputs locally. This website build does not include a file-upload API or a SHAHEEN account system.</p></article>
+  <article class="info-card"><h3>Third-party services</h3><p>PDF, QR and ZIP libraries are loaded from jsDelivr. Monetag advertising scripts are also loaded. These third parties may receive technical connection data under their own policies.</p></article>
+  <article class="info-card"><h3>Ads and user choice</h3><p>Ads are provided by Monetag, not by the file tools. Never ask visitors to click ads to unlock downloads. Ad appearance and availability are controlled by the ad provider.</p></article>
+  <article class="info-card"><h3>Protect sensitive files</h3><p>Do not use a shared or untrusted device for private documents. Browser extensions, device malware and third-party scripts can affect privacy; local processing is not a guarantee of total security.</p></article>
+ </div>
+ <p class="notice">Contact: <a href="mailto:mushtaqasghar669@gmail.com">mushtaqasghar669@gmail.com</a>. Before commercial launch, publish a complete legal privacy policy and terms page that match the actual analytics, advertising, cookies and data practices used by the site.</p>
+</section>
+
+<section id="faq" class="faq">
+ <div class="section-title"><div><h2>Frequently asked questions</h2><p>Clear answers before you use a tool.</p></div></div>
+ <details><summary>Are these tools free?</summary><p>This single-file version has no paid checkout. Hosting, internet data, third-party services and any future backend features may have separate costs.</p></details>
+ <details><summary>Are my files uploaded?</summary><p>The tools included here process selected files in the browser and this build has no SHAHEEN file-upload endpoint. However, external library and advertising scripts load from third-party services, so do not treat this as a fully offline or zero-third-party page.</p></details>
+ <details><summary>Does the video tool compress videos?</summary><p>No. It previews audio/video, reads browser-exposed metadata and exports a still frame from a video. Full video transcoding is not included because codec support and quality differ across browsers and devices.</p></details>
+ <details><summary>Why might an ad not appear?</summary><p>Ad delivery depends on the provider, zone status, country, device, browser, ad blocker, consent requirements and advertiser demand. A script being present does not guarantee that an ad or revenue will appear on every visit.</p></details>
+ <details><summary>Does this guarantee a top Google ranking or earnings?</summary><p>No. Search ranking and advertising income are not guaranteed. Useful content, fast performance, accessibility, original pages, technical SEO, policy compliance and real visitor experience all matter.</p></details>
+</section>
 </main>
-
-<footer>
-  <strong>SHAHEEN FormReady</strong>
-  <p>Prepare Your Files. Get Them Ready.</p>
-  <p>© <span id="year"></span> SHAHEEN. All rights reserved.</p>
-  <a href="mailto:mushtaqasghar669@gmail.com">
-    mushtaqasghar669@gmail.com
-  </a>
-</footer>
-
+<footer class="footer"><div class="wrap footrow"><div><strong>SHAHEEN FormReady</strong><div>Useful online tools, with honest limits.</div><div>© <span id="year"></span> SHAHEEN FormReady</div></div><div><a href="#privacy">Privacy</a><a href="#faq">FAQ</a><a href="mailto:mushtaqasghar669@gmail.com">Contact</a><div class="adnote">Ads may be shown by third-party partners.</div></div></div></footer>
 <script>
-"use strict";
+'use strict';
+const $ = (id) => document.getElementById(id);
+const MB = 1024 * 1024;
+function status(id, message, type='') {
+ const el=$(id); if(!el) return;
+ el.textContent=message; el.className='status show'+(type?' '+type:'');
+}
+function clearStatus(id){const el=$(id);if(el){el.textContent='';el.className='status';}}
+function bytes(n){if(!Number.isFinite(n))return '—';if(n<1024)return n+' B';const units=['KB','MB','GB','TB'];let i=-1;do{n/=1024;i++;}while(n>=1024&&i<units.length-1);return n.toFixed(2)+' '+units[i];}
+function safeName(name){return (name||'file').replace(/\.[^.]+$/,'').replace(/[^a-z0-9_-]+/gi,'_').replace(/^_+|_+$/g,'').slice(0,70)||'file';}
+function downloadBlob(blob, filename){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}
+function addResult(container, title, detail, blob, filename, imagePreview=false){
+ const box=document.createElement('div');box.className='result';
+ if(imagePreview){const im=document.createElement('img');im.alt='Processed image preview';im.src=URL.createObjectURL(blob);box.appendChild(im);}
+ const strong=document.createElement('strong');strong.textContent=title;box.appendChild(strong);
+ const small=document.createElement('small');small.textContent=detail;box.appendChild(small);
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.textContent='Download file';box.appendChild(a);
+ $(container).appendChild(box);
+}
+function switchPanel(name){
+ document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+name));
+ document.querySelectorAll('.tab').forEach(t=>{const active=t.dataset.tab===name;t.classList.toggle('active',active);t.setAttribute('aria-selected',String(active));});
+ document.getElementById('workspace').scrollIntoView({behavior:'smooth',block:'start'});
+}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>switchPanel(b.dataset.tab)));
+document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>switchPanel(b.dataset.open)));
+$('year').textContent=new Date().getFullYear();
+$('imgQuality').addEventListener('input',()=> $('qualityValue').textContent=Number($('imgQuality').value).toFixed(2));
+$('searchBtn').addEventListener('click',searchTools);
+$('toolSearch').addEventListener('keydown',e=>{if(e.key==='Enter')searchTools();});
+function searchTools(){
+ const q=$('toolSearch').value.trim().toLowerCase();
+ const items=[...document.querySelectorAll('.tool-card')];let first=null, count=0;
+ items.forEach(card=>{const match=!q||card.innerText.toLowerCase().includes(q);card.classList.toggle('hidden',!match);if(match){count++;if(!first)first=card;}});
+ $('toolCount').textContent=count+' tools';
+ if(first&&q){first.scrollIntoView({behavior:'smooth',block:'center'});switchPanel(first.dataset.open);}
+ else if(!count){$('toolCount').textContent='No matches';}
+}
 
-const $ = id => document.getElementById(id);
-
-const fileInput = $("fileInput");
-const formatInput = $("format");
-const qualityInput = $("quality");
-const qualityValue = $("qualityValue");
-const resizeToggle = $("resizeToggle");
-const resizeFields = $("resizeFields");
-const widthInput = $("width");
-const heightInput = $("height");
-
-const processBtn = $("processBtn");
-const resetBtn = $("resetBtn");
-const dropZone = $("dropZone");
-const status = $("status");
-
-let selectedFile = null;
-let originalURL = null;
-let outputURL = null;
-let processing = false;
-
-$("year").textContent = new Date().getFullYear();
-
-function sizeText(bytes) {
-  if (bytes < 1024 * 1024) {
-    return (bytes / 1024).toFixed(2) + " KB";
+// IMAGE STUDIO
+let imageOutputs=[];
+function canvasBlob(canvas,type,quality){return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Your browser could not create this image format.')),type,quality));}
+async function loadBitmap(file){
+ if('createImageBitmap' in window){try{return await createImageBitmap(file,{imageOrientation:'from-image'});}catch(e){return await createImageBitmap(file);}}
+ return new Promise((resolve,reject)=>{const url=URL.createObjectURL(file);const im=new Image();im.onload=()=>{URL.revokeObjectURL(url);resolve(im);};im.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Could not read image: '+file.name));};im.src=url;});
+}
+async function convertImage(file, options){
+ let bitmap=await loadBitmap(file);const sw=bitmap.width,sh=bitmap.height;
+ if(!sw||!sh)throw new Error('Image has invalid dimensions: '+file.name);
+ let maxW=options.maxW||sw,maxH=options.maxH||sh,scale=Math.min(1,maxW/sw,maxH/sh);
+ if(!options.keepAspect){scale=1;}
+ let dw=Math.max(1,Math.round(sw*scale)),dh=Math.max(1,Math.round(sh*scale));
+ if(!options.keepAspect){dw=Math.min(sw,maxW);dh=Math.min(sh,maxH);}
+ const rotate=options.rotate%360, ow=(rotate===90||rotate===270)?dh:dw,oh=(rotate===90||rotate===270)?dw:dh;
+ const canvas=document.createElement('canvas');canvas.width=ow;canvas.height=oh;
+ const ctx=canvas.getContext('2d',{alpha:options.type!=='image/jpeg'});if(!ctx)throw new Error('Canvas is unavailable.');
+ if(options.type==='image/jpeg'){ctx.fillStyle=options.bg;ctx.fillRect(0,0,ow,oh);}
+ ctx.translate(ow/2,oh/2);ctx.rotate(rotate*Math.PI/180);
+ ctx.drawImage(bitmap,-dw/2,-dh/2,dw,dh);
+ if(bitmap.close)bitmap.close();
+ const blob=await canvasBlob(canvas,options.type,options.quality);
+ if(blob.type!==options.type)throw new Error('This browser does not support the selected output format. Try JPG or PNG.');
+ return {blob,width:ow,height:oh,originalWidth:sw,originalHeight:sh};
+}
+$('processImages').addEventListener('click',async()=>{
+ clearStatus('imageStatus');$('imageResults').innerHTML='';imageOutputs=[];$('zipImages').disabled=true;
+ const files=[...$('imageFiles').files];if(!files.length){status('imageStatus','Choose at least one image first.','error');return;}
+ if(files.length>20){status('imageStatus','Please select no more than 20 images at once.','error');return;}
+ if(files.some(f=>f.size>25*MB)){status('imageStatus','Each image must be 25 MB or smaller.','error');return;}
+ const options={type:$('imgFormat').value,quality:Number($('imgQuality').value),maxW:Number($('imgWidth').value)||0,maxH:Number($('imgHeight').value)||0,rotate:Number($('imgRotation').value),bg:$('imgBackground').value,keepAspect:$('keepAspect').checked};
+ $('processImages').disabled=true;
+ try{
+  for(let i=0;i<files.length;i++){
+   const f=files[i];if(!f.type.startsWith('image/'))throw new Error(f.name+' is not a supported image.');
+   status('imageStatus','Processing '+(i+1)+' of '+files.length+': '+f.name);
+   const r=await convertImage(f,options);const ext=options.type==='image/jpeg'?'jpg':options.type==='image/png'?'png':'webp';
+   const filename=safeName(f.name)+'.'+ext;imageOutputs.push({blob:r.blob,filename});
+   addResult('imageResults',filename,`${r.width}×${r.height} · ${bytes(f.size)} → ${bytes(r.blob.size)}`,r.blob,filename,true);
   }
-  return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+  $('zipImages').disabled=imageOutputs.length<2;
+  status('imageStatus','Finished. Review each preview and download the files you need.','ok');
+ }catch(e){status('imageStatus',e.message||'Image processing failed.','error');}
+ finally{$('processImages').disabled=false;}
+});
+$('zipImages').addEventListener('click',async()=>{
+ if(!imageOutputs.length)return;
+ if(!window.JSZip){status('imageStatus','ZIP library did not load. Check your internet connection and reload.','error');return;}
+ try{const zip=new JSZip();imageOutputs.forEach(x=>zip.file(x.filename,x.blob));const blob=await zip.generateAsync({type:'blob'});downloadBlob(blob,'shaheen-images.zip');status('imageStatus','ZIP file created.','ok');}catch(e){status('imageStatus','Could not create ZIP: '+e.message,'error');}
+});
+$('clearImages').addEventListener('click',()=>{$('imageFiles').value='';$('imageResults').innerHTML='';imageOutputs=[];$('zipImages').disabled=true;clearStatus('imageStatus');});
+
+// PDF STUDIO
+function getPDFLib(){if(!window.PDFLib)throw new Error('PDF library did not load. Check your internet connection and reload the page.');return window.PDFLib;}
+async function selectedPDF(file){if(!file)throw new Error('Choose a PDF file first.');if(file.size>100*MB)throw new Error('For this browser version, PDF files must be 100 MB or smaller.');return new Uint8Array(await file.arrayBuffer());}
+$('mergePDF').addEventListener('click',async()=>{
+ try{const {PDFDocument}=getPDFLib();const fs=[...$('mergeFiles').files];if(fs.length<2)throw new Error('Choose at least two PDF files.');if(fs.some(f=>f.size>100*MB))throw new Error('Each PDF must be 100 MB or smaller.');
+  const merged=await PDFDocument.create();for(const f of fs){if(f.type&&f.type!=='application/pdf'&&!f.name.toLowerCase().endsWith('.pdf'))throw new Error(f.name+' is not a PDF.');const doc=await PDFDocument.load(await f.arrayBuffer());const pages=await merged.copyPages(doc,doc.getPageIndices());pages.forEach(p=>merged.addPage(p));}
+  const blob=new Blob([await merged.save()],{type:'application/pdf'});downloadBlob(blob,'shaheen-merged.pdf');status('pdfStatus','PDFs merged successfully.','ok');
+ }catch(e){status('pdfStatus',e.message||'Could not merge PDFs.','error');}
+});
+function parsePages(input,total){
+ if(!input.trim())return Array.from({length:total},(_,i)=>i);
+ const set=new Set();for(const part of input.split(',')){const p=part.trim();if(!p)continue;const m=p.match(/^(\d+)(?:\s*-\s*(\d+))?$/);if(!m)throw new Error('Use a range such as 1-3,5,8-10.');const start=Number(m[1]),end=Number(m[2]||m[1]);if(start<1||end<start||end>total)throw new Error(`Page range must be between 1 and ${total}.`);for(let n=start;n<=end;n++)set.add(n-1);}
+ const arr=[...set].sort((a,b)=>a-b);if(!arr.length)throw new Error('No pages were selected.');return arr;
 }
-
-function message(text, type = "") {
-  status.textContent = text;
-  status.className = "status " + type;
-}
-
-function clearURLs() {
-  if (originalURL) URL.revokeObjectURL(originalURL);
-  if (outputURL) URL.revokeObjectURL(outputURL);
-
-  originalURL = null;
-  outputURL = null;
-}
-
-function reset() {
-  clearURLs();
-
-  selectedFile = null;
-  processing = false;
-
-  fileInput.value = "";
-  processBtn.disabled = true;
-
-  $("previews").style.display = "none";
-  $("result").style.display = "none";
-
-  $("originalPreview").removeAttribute("src");
-  $("outputPreview").removeAttribute("src");
-
-  $("downloadLink").removeAttribute("href");
-
-  message("Select an image to begin.");
-}
-
-function selectFile(file) {
-  reset();
-
-  const allowed = [
-    "image/jpeg",
-    "image/png",
-    "image/webp"
-  ];
-
-  if (!file || !allowed.includes(file.type)) {
-    message("Please select a valid JPG, PNG or WebP image.", "error");
-    return;
-  }
-
-  if (file.size > 15 * 1024 * 1024) {
-    message("The maximum file size is 15 MB.", "error");
-    return;
-  }
-
-  selectedFile = file;
-  originalURL = URL.createObjectURL(file);
-
-  const img = new Image();
-
-  img.onload = () => {
-    if (selectedFile !== file) return;
-
-    $("originalPreview").src = originalURL;
-
-    $("originalInfo").textContent =
-      sizeText(file.size) + " · " +
-      img.naturalWidth + " × " + img.naturalHeight + " px";
-
-    $("previews").style.display = "grid";
-    processBtn.disabled = false;
-
-    message("Image loaded successfully.", "success");
-  };
-
-  img.onerror = () => {
-    if (selectedFile === file) {
-      reset();
-      message("Unable to read this image.", "error");
-    }
-  };
-
-  img.src = originalURL;
-}
-
-fileInput.addEventListener("change", () => {
-  if (fileInput.files[0]) {
-    selectFile(fileInput.files[0]);
-  }
+$('splitPDF').addEventListener('click',async()=>{
+ try{const {PDFDocument}=getPDFLib();const f=$('singlePDF').files[0];const src=await PDFDocument.load(await selectedPDF(f));const indices=parsePages($('pageRange').value,src.getPageCount());const out=await PDFDocument.create();const pages=await out.copyPages(src,indices);pages.forEach(p=>out.addPage(p));const blob=new Blob([await out.save()],{type:'application/pdf'});downloadBlob(blob,'shaheen-extracted-pages.pdf');status('pdfStatus',`Extracted ${indices.length} page(s).`,'ok');}
+ catch(e){status('pdfStatus',e.message||'Could not extract pages.','error');}
+});
+$('rotatePDF').addEventListener('click',async()=>{
+ try{const {PDFDocument,degrees}=getPDFLib();const f=$('singlePDF').files[0];const doc=await PDFDocument.load(await selectedPDF(f));doc.getPages().forEach(p=>{const old=p.getRotation().angle||0;p.setRotation(degrees((old+90)%360));});const blob=new Blob([await doc.save()],{type:'application/pdf'});downloadBlob(blob,'shaheen-rotated.pdf');status('pdfStatus','All pages rotated 90° clockwise.','ok');}
+ catch(e){status('pdfStatus',e.message||'Could not rotate PDF.','error');}
+});
+$('imagesToPDF').addEventListener('click',async()=>{
+ try{const {PDFDocument}=getPDFLib();const fs=[...$('pdfImages').files];if(!fs.length)throw new Error('Choose at least one JPG or PNG image.');if(fs.length>40)throw new Error('Choose no more than 40 images.');const doc=await PDFDocument.create();
+  for(const f of fs){const b=await f.arrayBuffer();let img;if(f.type==='image/jpeg'||/\.jpe?g$/i.test(f.name))img=await doc.embedJpg(b);else if(f.type==='image/png'||/\.png$/i.test(f.name))img=await doc.embedPng(b);else throw new Error('Only JPG and PNG images are supported: '+f.name);
+   const maxW=595,maxH=842,scale=Math.min(maxW/img.width,maxH/img.height,1);const w=img.width*scale,h=img.height*scale;const page=doc.addPage([Math.max(w,1),Math.max(h,1)]);page.drawImage(img,{x:0,y:0,width:w,height:h});}
+  const blob=new Blob([await doc.save()],{type:'application/pdf'});downloadBlob(blob,'shaheen-images.pdf');status('pdfStatus',`Created a PDF with ${fs.length} image page(s).`,'ok');}
+ catch(e){status('pdfStatus',e.message||'Could not create PDF.','error');}
 });
 
-qualityInput.addEventListener("input", () => {
-  qualityValue.textContent = qualityInput.value + "%";
+// QR CODE
+let qrReady=false;
+$('makeQR').addEventListener('click',async()=>{
+ try{if(!window.QRCode)throw new Error('QR library did not load. Check your connection and reload.');const text=$('qrText').value.trim();if(!text)throw new Error('Enter text or a URL first.');if(text.length>2500)throw new Error('Please keep QR content under 2,500 characters.');const size=Number($('qrSize').value),margin=Number($('qrMargin').value);await QRCode.toCanvas($('qrCanvas'),text,{width:size,margin,errorCorrectionLevel:'M',color:{dark:'#071321',light:'#ffffff'}});$('qrOutput').classList.remove('hidden');$('downloadQR').disabled=false;qrReady=true;status('qrStatus','QR code generated. Scan it to test before sharing.','ok');}
+ catch(e){status('qrStatus',e.message||'Could not create QR code.','error');}
+});
+$('downloadQR').addEventListener('click',()=>{if(!qrReady)return;$('qrCanvas').toBlob(b=>{if(b)downloadBlob(b,'shaheen-qr.png');},'image/png');});
+
+// TEXT AND JSON
+function updateCounts(){const s=$('textInput').value;const words=s.trim()?s.trim().split(/\s+/u).length:0;$('wordCount').textContent=words.toLocaleString();$('charCount').textContent=s.length.toLocaleString();$('lineCount').textContent=s.length?s.split(/\r\n|\r|\n/).length:0;}
+$('textInput').addEventListener('input',updateCounts);updateCounts();
+document.querySelectorAll('[data-text]').forEach(b=>b.addEventListener('click',()=>{const t=$('textInput');const v=t.value;switch(b.dataset.text){case'upper':t.value=v.toLocaleUpperCase();break;case'lower':t.value=v.toLocaleLowerCase();break;case'title':t.value=v.toLocaleLowerCase().replace(/(^|\s)\S/g,c=>c.toLocaleUpperCase());break;case'trim':t.value=v.split(/\r?\n/).map(x=>x.replace(/\s+/g,' ').trim()).filter(Boolean).join('\n');break;}updateCounts();}));
+async function copyTextValue(value,id){try{await navigator.clipboard.writeText(value);if(id)status(id,'Copied to clipboard.','ok');}catch(e){if(id)status(id,'Clipboard permission is unavailable. Select and copy the text manually.','error');}}
+$('copyText').addEventListener('click',()=>copyTextValue($('textInput').value,'textStatus'));
+function formatJSON(minify){try{const obj=JSON.parse($('jsonInput').value);$('jsonInput').value=JSON.stringify(obj,null,minify?0:2);status('jsonStatus','Valid JSON. Formatting completed.','ok');}catch(e){status('jsonStatus','Invalid JSON: '+e.message,'error');}}
+$('formatJSON').addEventListener('click',()=>formatJSON(false));$('minifyJSON').addEventListener('click',()=>formatJSON(true));$('copyJSON').addEventListener('click',()=>copyTextValue($('jsonInput').value,'jsonStatus'));
+$('urlEncode').addEventListener('click',()=>{$('encodeInput').value=encodeURIComponent($('encodeInput').value);});
+$('urlDecode').addEventListener('click',()=>{try{$('encodeInput').value=decodeURIComponent($('encodeInput').value);}catch(e){status('textStatus','Cannot decode: invalid URL-encoded text.','error');}});
+$('base64Encode').addEventListener('click',()=>{try{$('encodeInput').value=btoa(unescape(encodeURIComponent($('encodeInput').value)));}catch(e){status('textStatus','Cannot encode this text.','error');}});
+$('base64Decode').addEventListener('click',()=>{try{$('encodeInput').value=decodeURIComponent(escape(atob($('encodeInput').value.trim())));}catch(e){status('textStatus','Invalid Base64 input.','error');}});
+
+// MEDIA INSPECTOR
+let currentMediaURL=null,currentMediaKind='';
+$('mediaFile').addEventListener('change',()=>{
+ const f=$('mediaFile').files[0];clearStatus('mediaStatus');$('mediaMetrics').innerHTML='';$('frameResult').innerHTML='';$('captureFrame').disabled=true;$('videoPreview').classList.add('hidden');$('audioPreview').classList.add('hidden');
+ if(currentMediaURL){URL.revokeObjectURL(currentMediaURL);currentMediaURL=null;}if(!f)return;
+ if(!f.type.startsWith('video/')&&!f.type.startsWith('audio/')){status('mediaStatus','Select a supported video or audio file.','error');return;}
+ currentMediaURL=URL.createObjectURL(f);currentMediaKind=f.type.startsWith('video/')?'video':'audio';const el=currentMediaKind==='video'?$('videoPreview'):$('audioPreview');el.src=currentMediaURL;el.classList.remove('hidden');
+ const metrics=[['File',f.name],['Size',bytes(f.size)],['MIME type',f.type||'Not provided'],['Last modified',f.lastModified?new Date(f.lastModified).toLocaleString():'Not provided']];
+ $('mediaMetrics').innerHTML=metrics.map(x=>`<div class="metric"><strong style="font-size:14px;overflow-wrap:anywhere">${escapeHTML(x[1])}</strong><small>${escapeHTML(x[0])}</small></div>`).join('');
+ if(currentMediaKind==='video'){
+  el.onloadedmetadata=()=>{const extra=[['Duration',Number.isFinite(el.duration)?el.duration.toFixed(2)+' sec':'Unknown'],['Resolution',el.videoWidth+' × '+el.videoHeight],['Aspect ratio',el.videoHeight?(el.videoWidth/el.videoHeight).toFixed(3):'Unknown']];$('mediaMetrics').innerHTML+=extra.map(x=>`<div class="metric"><strong>${escapeHTML(x[1])}</strong><small>${escapeHTML(x[0])}</small></div>`).join('');$('captureFrame').disabled=false;$('frameTime').max=Number.isFinite(el.duration)?String(Math.max(0,el.duration)):'';};
+  el.onerror=()=>status('mediaStatus','This browser cannot play this video codec. Try another browser or a different file.','error');
+ }else{
+  el.onloadedmetadata=()=>{$('mediaMetrics').innerHTML+=`<div class="metric"><strong>${Number.isFinite(el.duration)?el.duration.toFixed(2)+' sec':'Unknown'}</strong><small>Duration</small></div>`;};
+  el.onerror=()=>status('mediaStatus','This browser cannot play this audio codec.','error');
+ }
+});
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+$('captureFrame').addEventListener('click',async()=>{
+ try{const v=$('videoPreview');if(currentMediaKind!=='video'||!v.videoWidth)throw new Error('Load a playable video first.');const t=Math.max(0,Math.min(Number($('frameTime').value)||0,Number.isFinite(v.duration)?v.duration:0));
+  if(Math.abs((v.currentTime||0)-t)>0.02){await new Promise((resolve,reject)=>{const done=()=>resolve();const fail=()=>reject(new Error('Could not seek to that video frame.'));v.addEventListener('seeked',done,{once:true});v.addEventListener('error',fail,{once:true});try{v.currentTime=t;}catch(e){reject(e);}});}
+  const c=$('frameCanvas');c.width=v.videoWidth;c.height=v.videoHeight;const ctx=c.getContext('2d');ctx.drawImage(v,0,0,c.width,c.height);const blob=await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error('Could not export frame.')),'image/png'));
+  $('frameResult').innerHTML='';addResult('frameResult','Captured video frame',`${c.width}×${c.height} · PNG`,blob,'shaheen-video-frame.png',true);status('mediaStatus','Frame exported as PNG.','ok');
+ }catch(e){status('mediaStatus',e.message||'Could not capture frame.','error');}
 });
 
-resizeToggle.addEventListener("change", () => {
-  resizeFields.classList.toggle("show", resizeToggle.checked);
+// FILE METADATA AND HASH
+let inspectedFile=null,lastHash='';
+$('inspectFile').addEventListener('change',()=>{
+ inspectedFile=$('inspectFile').files[0]||null;lastHash='';$('hashFile').disabled=!inspectedFile;$('copyHash').disabled=true;clearStatus('fileStatus');$('fileDetails').innerHTML='';if(!inspectedFile)return;
+ const f=inspectedFile,rows=[['Name',f.name],['Size',bytes(f.size)],['MIME type',f.type||'Unknown / not provided'],['Last modified',f.lastModified?new Date(f.lastModified).toLocaleString():'Unknown'],['Extension',f.name.includes('.')?f.name.split('.').pop().toUpperCase():'No extension']];
+ $('fileDetails').innerHTML='<table><tbody>'+rows.map(([k,v])=>`<tr><th>${escapeHTML(k)}</th><td>${escapeHTML(v)}</td></tr>`).join('')+'</tbody></table>';
 });
-
-resetBtn.addEventListener("click", reset);
-
-dropZone.addEventListener("dragover", event => {
-  event.preventDefault();
-  dropZone.classList.add("drag");
+$('hashFile').addEventListener('click',async()=>{
+ try{if(!inspectedFile)throw new Error('Choose a file first.');if(inspectedFile.size>100*MB)throw new Error('For this browser version, files must be 100 MB or smaller to calculate a hash.');if(!crypto.subtle)throw new Error('SHA-256 requires a secure HTTPS connection in a supported browser.');$('hashFile').disabled=true;status('fileStatus','Calculating SHA-256…');const buf=await inspectedFile.arrayBuffer();const digest=await crypto.subtle.digest('SHA-256',buf);lastHash=[...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');status('fileStatus','SHA-256: '+lastHash,'ok');$('copyHash').disabled=false;
+ }catch(e){status('fileStatus',e.message||'Could not calculate hash.','error');}finally{$('hashFile').disabled=!inspectedFile;}
 });
+$('copyHash').addEventListener('click',()=>{if(lastHash)copyTextValue(lastHash,'fileStatus');});
 
-dropZone.addEventListener("dragleave", () => {
-  dropZone.classList.remove("drag");
-});
-
-dropZone.addEventListener("drop", event => {
-  event.preventDefault();
-  dropZone.classList.remove("drag");
-
-  const file = event.dataTransfer.files[0];
-  if (file) selectFile(file);
-});
-
-function canvasBlob(canvas, type, quality) {
-  return new Promise((resolve, reject) => {
-    canvas.toBlob(blob => {
-      if (blob) resolve(blob);
-      else reject(new Error("Your browser could not create this format."));
-    }, type, quality);
-  });
-}
-
-async function processImage() {
-
-  if (!selectedFile || processing) return;
-
-  processing = true;
-  processBtn.disabled = true;
-  $("result").style.display = "none";
-
-  message("Processing image...");
-
-  let bitmap;
-
-  try {
-
-    bitmap = await createImageBitmap(selectedFile);
-
-    let width = bitmap.width;
-    let height = bitmap.height;
-
-    if (resizeToggle.checked) {
-
-      const maxW = Number(widthInput.value);
-      const maxH = Number(heightInput.value);
-
-      if (
-        !Number.isInteger(maxW) || maxW < 1 || maxW > 12000 ||
-        !Number.isInteger(maxH) || maxH < 1 || maxH > 12000
-      ) {
-        throw new Error("Enter valid dimensions between 1 and 12000.");
-      }
-
-      const scale = Math.min(
-        1,
-        maxW / width,
-        maxH / height
-      );
-
-      width = Math.max(1, Math.round(width * scale));
-      height = Math.max(1, Math.round(height * scale));
-    }
-
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-
-    const ctx = canvas.getContext("2d");
-
-    if (!ctx) {
-      throw new Error("Canvas is not supported in this browser.");
-    }
-
-    const chosen = formatInput.value;
-
-    const outputType =
-      chosen === "original" ? selectedFile.type : chosen;
-
-    // White background prevents transparent pixels
-    // from becoming unexpectedly black in JPEG.
-    if (outputType === "image/jpeg") {
-      ctx.fillStyle = "#FFFFFF";
-      ctx.fillRect(0, 0, width, height);
-    }
-
-    ctx.drawImage(bitmap, 0, 0, width, height);
-
-    const quality = Number(qualityInput.value) / 100;
-
-    const blob = await canvasBlob(
-      canvas,
-      outputType,
-      quality
-    );
-
-    // Some browsers may silently fall back to PNG.
-    if (blob.type !== outputType) {
-      throw new Error(
-        "This browser does not support the selected output format."
-      );
-    }
-
-    if (outputURL) URL.revokeObjectURL(outputURL);
-
-    outputURL = URL.createObjectURL(blob);
-
-    $("outputPreview").src = outputURL;
-
-    $("outputInfo").textContent =
-      sizeText(blob.size) + " · " +
-      width + " × " + height + " px";
-
-    const difference = selectedFile.size - blob.size;
-
-    $("sizeInfo").textContent =
-      "Original: " + sizeText(selectedFile.size) +
-      " | New: " + sizeText(blob.size);
-
-    $("dimensionInfo").textContent =
-      "Output dimensions: " + width + " × " + height + " px";
-
-    $("savingInfo").textContent =
-      difference > 0
-        ? "File size reduced by " +
-          ((difference / selectedFile.size) * 100).toFixed(1) + "%."
-        : difference === 0
-          ? "File size remained the same."
-          : "Output is " + sizeText(-difference) + " larger than original.";
-
-    const extension = {
-      "image/jpeg": "jpg",
-      "image/png": "png",
-      "image/webp": "webp"
-    }[blob.type];
-
-    $("downloadLink").href = outputURL;
-    $("downloadLink").download = "shaheen-image." + extension;
-
-    $("result").style.display = "block";
-
-    message(
-      "Image processed successfully. Check the preview before downloading.",
-      "success"
-    );
-
-  } catch (error) {
-
-    message(error.message || "Something went wrong.", "error");
-
-  } finally {
-
-    if (bitmap) bitmap.close();
-
-    processing = false;
-    processBtn.disabled = !selectedFile;
-
-  }
-}
-
-processBtn.addEventListener("click", processImage);
-
-window.addEventListener("pagehide", clearURLs);
-
+// Helpful feature detection notice for browsers without Canvas image encoding.
+if(!HTMLCanvasElement.prototype.toBlob){status('imageStatus','Your browser does not support Canvas image export. Update your browser to use Image Studio.','error');}
 </script>
-
 </body>
 </html>
